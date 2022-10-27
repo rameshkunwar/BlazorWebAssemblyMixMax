@@ -7,32 +7,60 @@
 {
     <div class="alert-danger">@ErrorMsg</div>
 }
-<div class="alert-primary">UserId = @Id</div>
+@if (content.Count > 0)
+{
+    <div class="github-user__container bg-white">
+        <h3 class="root__element">Github info</h3>
+
+        @foreach (var item in content)
+        {
+            <div class="github-user__container github-user__container--individual-data bg-light  my-3">
+                <ul class="list-group">
+                <li class="list-group-item">Id: @item.Id</li>
+                <li class="list-group-item">Name: @item.Name</li>
+                <li class="list-group-item">Descripton: @item.Description</li>
+                <li class="list-group-item">Url: @item.Url</li>
+                <li class="list-group-item">HtmlUrl: @item.HtmlUrl</li>
+
+                <li class="list-group-item">
+                    <strong>Owner info</strong>
+                    <ul class="list-group">
+                        <li class="list-group-item">@item.Owner.Login</li>
+                        <li class="list-group-item">@item.Owner.Id</li>
+                    </ul>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>License info</strong>
+                    <ul class="list-group">
+                        <li class="list-group-item">Key: @item?.License?.Key</li>
+                        <li class="list-group-item">Name: @item?.License?.Name</li>
+                    </ul>
+                </li>
+
+            </ul>
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <div class="oi oi-loop-circular">Loading...</div>
+}
 
 @code {
+    List<Root> content = new List<Root>();
     protected override async Task OnInitializedAsync()
     {
         var githubOwner = new List<Owner>();
         try
         {
-            var client = factory.CreateClient("github");            
+            var client = factory.CreateClient("github");
             var response = await client.GetAsync("users/rameshkunwar/repos");
-            response.EnsureSuccessStatusCode();            
+            response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsAsync<List<Root>>().ConfigureAwait(false);
-
-            if(content.Count > 0)
-            {
-                var firstEle = content.FirstOrDefault();
-                if(firstEle is not null)
-                {
-                    Id = firstEle.Id;                  
-                }
-            }
-            else
-            {
-                ErrorMsg = "content resulted null. Most probably deserialization did not work, check it";
-            }
+            content = await response.Content.ReadAsAsync<List<Root>>().ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -42,8 +70,5 @@
     }
 
     [Parameter]
-    public string? ErrorMsg { get; set; } 
-
-    [Parameter]
-    public int Id { get; set; }
+    public string? ErrorMsg { get; set; }
 }

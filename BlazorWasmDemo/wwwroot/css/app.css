@@ -62,3 +62,7 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.github-user__container--individual-data > ul > li.list-group-item {
+    background-color: unset !important;
+}
