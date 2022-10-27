@@ -1,0 +1,16 @@
+﻿@page "/parent"
+<h3>Parent-child callback passing example</h3>
+
+<Child Title="Hey, calling from Parent" OnClickCallback="@ShowMessage">
+    All content for the child component will be supplied by parent 
+   
+</Child>
+ <div class="mt-2">@messge</div>
+
+@code {
+    private string? messge;
+    private void ShowMessage(MouseEventArgs args)
+    {
+        messge = $"MyScreen coordinates are: X = ({args.ScreenX}) Y = ({args.ScreenY}) ";
+    }
+}

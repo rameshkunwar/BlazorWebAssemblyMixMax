@@ -1,0 +1,18 @@
+﻿<h3>I'm a Child component</h3>
+
+<p>
+    <button @onclick="OnClickCallback">
+        Trigger parent component's method
+    </button>
+</p>
+
+@code {
+    [Parameter]
+    public string? Title{ get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback{ get; set; }
+}
