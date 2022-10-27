@@ -7,26 +7,32 @@
 {
     <div class="alert-danger">@ErrorMsg</div>
 }
+<div class="alert-primary">UserId = @Id</div>
 
 @code {
     protected override async Task OnInitializedAsync()
     {
-        List<Github> github = new List<Github>();
+        var githubOwner = new List<Owner>();
         try
         {
-            var client = factory.CreateClient("github");
-            //var response = await client.GetAsync("repos/dotnet/docs/issues");
+            var client = factory.CreateClient("github");            
             var response = await client.GetAsync("users/rameshkunwar/repos");
-            response.EnsureSuccessStatusCode();
-            string? content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();            
 
-            var options = new JsonSerializerOptions
+            var content = await response.Content.ReadAsAsync<List<Root>>().ConfigureAwait(false);
+
+            if(content.Count > 0)
+            {
+                var firstEle = content.FirstOrDefault();
+                if(firstEle is not null)
                 {
-                    IncludeFields = true
-                };
-
-            var serializedData = JsonSerializer.Deserialize<Github>(content, options);
-            var someContent = "he";
+                    Id = firstEle.Id;                  
+                }
+            }
+            else
+            {
+                ErrorMsg = "content resulted null. Most probably deserialization did not work, check it";
+            }
         }
         catch (Exception e)
         {
@@ -37,4 +43,7 @@
 
     [Parameter]
     public string? ErrorMsg { get; set; } 
+
+    [Parameter]
+    public int Id { get; set; }
 }
