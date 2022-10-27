@@ -1,0 +1,40 @@
+﻿@page "/apidemo"
+@inject IHttpClientFactory factory
+
+<h3>webapi</h3>
+
+@if (!string.IsNullOrWhiteSpace(ErrorMsg))
+{
+    <div class="alert-danger">@ErrorMsg</div>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        List<Github> github = new List<Github>();
+        try
+        {
+            var client = factory.CreateClient("github");
+            //var response = await client.GetAsync("repos/dotnet/docs/issues");
+            var response = await client.GetAsync("users/rameshkunwar/repos");
+            response.EnsureSuccessStatusCode();
+            string? content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var options = new JsonSerializerOptions
+                {
+                    IncludeFields = true
+                };
+
+            var serializedData = JsonSerializer.Deserialize<Github>(content, options);
+            var someContent = "he";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            ErrorMsg = e.Message;
+        }
+    }
+
+    [Parameter]
+    public string? ErrorMsg { get; set; } 
+}

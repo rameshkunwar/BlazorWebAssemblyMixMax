@@ -1,0 +1,18 @@
+﻿<div class="alert alert-secondary mt-4">
+    <span class="oi oi-pencil me-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+
+    <span class="text-nowrap">
+       No need to take a survey
+    </span>
+    and not need to tell us what you think.
+    <span>You can still win this amount:</span><strong>@Random</strong>
+</div>
+
+@code {
+    // Demonstrates how a parent component can supply parameters
+    [Parameter]
+    public string? Title { get; set; }
+    [Parameter]
+    public int Random { get; set; }
+}

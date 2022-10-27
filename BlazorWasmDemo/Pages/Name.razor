@@ -1,0 +1,33 @@
+﻿@page "/name"
+@inject NavigationManager NavigationManager
+<PageTitle>Find a name</PageTitle>
+
+<div style="margin-top:2rem;">
+    Please write your name.<br/>
+    <input @bind ="text" />
+    <button @onclick="HandleOnClick">Submit</button>
+</div>
+<div style="margin-top:2rem;">
+    @if (!string.IsNullOrWhiteSpace(name))
+   {
+       @:Welcome @name
+   }
+
+</div>
+<div class="mt-3">
+    Tired of playing this game? Go to <button @onclick="GoToIndex">Home</button>
+</div>
+@code {
+    string text = default!;
+    string name = default!;
+
+    void HandleOnClick()
+    {
+        name = text;
+    }
+
+    void GoToIndex()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

@@ -1,0 +1,31 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@inject MyApplicationState AppState 
+@*@layout MyOwnLayout*@
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+<h3>You are visitor number <strong>@AppState.VisitorCounter</strong></h3>
+<div style="margin-top:2rem;">
+    Wanna play find name game? click <button @onclick="Navigate">her</button>
+</div>
+
+<SurveyPrompt Title="How is Blazor working for you?" Random=50500/>
+@code{
+    void Navigate()
+    {
+        NavigationManager.NavigateTo("name");
+    }
+
+    void CalculateVisitor()
+    {
+        AppState.IncrementCounter();
+    }
+
+    protected override void OnInitialized()
+    {
+        CalculateVisitor();
+    }
+}
